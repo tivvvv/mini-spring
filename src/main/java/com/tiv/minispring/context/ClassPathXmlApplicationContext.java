@@ -1,72 +1,36 @@
 package com.tiv.minispring.context;
 
 import com.tiv.minispring.bean.BeanDefinition;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.tiv.minispring.bean.BeanFactory;
+import com.tiv.minispring.bean.SimpleBeanFactory;
+import com.tiv.minispring.bean.XmlBeanDefinitionReader;
+import com.tiv.minispring.bean.exception.BeansException;
+import com.tiv.minispring.core.ClassPathXmlResource;
+import com.tiv.minispring.core.Resource;
 
 /**
  * 类路径xml应用上下文
+ * 上下文负责整合容器的启动过程,读取外部配置,解析并构建bean定义,创建bean工厂
  */
-public class ClassPathXmlApplicationContext {
+public class ClassPathXmlApplicationContext implements BeanFactory {
 
-    private List<BeanDefinition> beanDefinitions = new ArrayList<>();
-
-    private Map<String, Object> singletons = new HashMap<>();
+    BeanFactory beanFactory;
 
     public ClassPathXmlApplicationContext(String fileName) {
-        this.readXml(fileName);
-        this.instanceBeans();
+        this.beanFactory = new SimpleBeanFactory();
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(this.beanFactory);
+        Resource resource = new ClassPathXmlResource(fileName);
+        reader.loadBeanDefinitions(resource);
     }
 
-    /**
-     * 获取bean实例
-     *
-     * @param beanName
-     * @return
-     */
-    public Object getBean(String beanName) {
-        return singletons.get(beanName);
+    @Override
+    public Object getBean(String beanName) throws BeansException {
+        return this.beanFactory.getBean(beanName);
     }
 
-    /**
-     * 实例化bean
-     */
-    private void instanceBeans() {
-        for (BeanDefinition beanDefinition : beanDefinitions) {
-            try {
-                singletons.put(beanDefinition.getId(), Class.forName(beanDefinition.getClassName()).newInstance());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * 读取xml文件
-     *
-     * @param fileName
-     */
-    private void readXml(String fileName) {
-        SAXReader saxReader = new SAXReader();
-        try {
-            URL xmlPath = this.getClass().getClassLoader().getResource(fileName);
-            Document document = saxReader.read(xmlPath);
-            Element rootElement = document.getRootElement();
-            for (Element element : rootElement.elements()) {
-                String beanId = element.attributeValue("id");
-                String beanClassName = element.attributeValue("class");
-                beanDefinitions.add(new BeanDefinition(beanId, beanClassName));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void registerBeanDefinition(BeanDefinition beanDefinition) {
+        this.beanFactory.registerBeanDefinition(beanDefinition);
     }
 
 }
