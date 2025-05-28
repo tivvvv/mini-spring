@@ -1,6 +1,5 @@
 package com.tiv.minispring.context;
 
-import com.tiv.minispring.bean.BeanDefinition;
 import com.tiv.minispring.bean.BeanFactory;
 import com.tiv.minispring.bean.SimpleBeanFactory;
 import com.tiv.minispring.bean.XmlBeanDefinitionReader;
@@ -14,7 +13,7 @@ import com.tiv.minispring.core.Resource;
  */
 public class ClassPathXmlApplicationContext implements BeanFactory {
 
-    BeanFactory beanFactory;
+    SimpleBeanFactory beanFactory;
 
     public ClassPathXmlApplicationContext(String fileName) {
         this.beanFactory = new SimpleBeanFactory();
@@ -29,8 +28,13 @@ public class ClassPathXmlApplicationContext implements BeanFactory {
     }
 
     @Override
-    public void registerBeanDefinition(BeanDefinition beanDefinition) {
-        this.beanFactory.registerBeanDefinition(beanDefinition);
+    public void registerBean(String beanName, Object obj) {
+        this.beanFactory.registerBean(beanName, obj);
+    }
+
+    @Override
+    public Boolean containsBean(String beanName) {
+        return this.beanFactory.containsBean(beanName);
     }
 
 }

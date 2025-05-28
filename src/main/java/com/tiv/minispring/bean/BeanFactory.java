@@ -17,10 +17,19 @@ public interface BeanFactory {
     Object getBean(String beanName) throws BeansException;
 
     /**
-     * 注册bean定义
+     * 注册bean
      *
-     * @param beanDefinition
+     * @param beanName
+     * @param obj
      */
-    void registerBeanDefinition(BeanDefinition beanDefinition);
+    void registerBean(String beanName, Object obj);
+
+    /**
+     * 判断bean是否存在
+     *
+     * @param beanName
+     * @return
+     */
+    Boolean containsBean(String beanName);
 
 }
