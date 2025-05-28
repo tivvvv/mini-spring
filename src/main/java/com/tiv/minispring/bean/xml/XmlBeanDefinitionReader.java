@@ -1,5 +1,7 @@
-package com.tiv.minispring.bean;
+package com.tiv.minispring.bean.xml;
 
+import com.tiv.minispring.bean.BeanDefinition;
+import com.tiv.minispring.bean.SimpleBeanFactory;
 import com.tiv.minispring.core.Resource;
 import org.dom4j.Element;
 

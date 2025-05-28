@@ -2,8 +2,8 @@ package com.tiv.minispring.context;
 
 import com.tiv.minispring.bean.BeanFactory;
 import com.tiv.minispring.bean.SimpleBeanFactory;
-import com.tiv.minispring.bean.XmlBeanDefinitionReader;
 import com.tiv.minispring.bean.exception.BeansException;
+import com.tiv.minispring.bean.xml.XmlBeanDefinitionReader;
 import com.tiv.minispring.core.ClassPathXmlResource;
 import com.tiv.minispring.core.Resource;
 
