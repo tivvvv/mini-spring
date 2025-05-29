@@ -17,19 +17,35 @@ public interface BeanFactory {
     Object getBean(String beanName) throws BeansException;
 
     /**
-     * 注册bean
-     *
-     * @param beanName
-     * @param obj
-     */
-    void registerBean(String beanName, Object obj);
-
-    /**
      * 判断bean是否存在
      *
      * @param beanName
      * @return
      */
-    Boolean containsBean(String beanName);
+    boolean containsBean(String beanName);
+
+    /**
+     * 判断bean是否是单例模式
+     *
+     * @param beanName
+     * @return
+     */
+    boolean isSingleton(String beanName);
+
+    /**
+     * 判断bean是否是原型模式
+     *
+     * @param beanName
+     * @return
+     */
+    boolean isPrototype(String beanName);
+
+    /**
+     * 获取bean的类型
+     *
+     * @param beanName
+     * @return
+     */
+    Class<?> getType(String beanName);
 
 }
