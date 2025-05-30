@@ -1,6 +1,6 @@
 package com.tiv.minispring.bean;
 
-import com.tiv.minispring.bean.injection.ArgumentValues;
+import com.tiv.minispring.bean.injection.ConstructorArgumentValues;
 import com.tiv.minispring.bean.injection.PropertyValues;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +20,7 @@ public class BeanDefinition {
 
     private String className;
 
-    private ArgumentValues constructorArgumentValues;
+    private ConstructorArgumentValues constructorArgumentValues;
 
     private PropertyValues propertyValues;
 

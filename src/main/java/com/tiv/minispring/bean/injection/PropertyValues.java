@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * setter属性值集合
+ */
 @NoArgsConstructor
 public class PropertyValues {
 
@@ -25,10 +28,6 @@ public class PropertyValues {
 
     public List<PropertyValue> getPropertyValueList() {
         return this.propertyValueList;
-    }
-
-    public void addPropertyValue(String propertyName, Object propertyValue) {
-        addPropertyValue(new PropertyValue(propertyName, propertyValue));
     }
 
     public void addPropertyValue(PropertyValue propertyValue) {

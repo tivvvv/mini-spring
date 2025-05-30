@@ -4,18 +4,21 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 构造器参数值
+ */
 @Getter
 @Setter
 @AllArgsConstructor
-public class ArgumentValue {
-
-    private String type;
+public class ConstructorArgumentValue {
 
     private String name;
 
+    private String type;
+
     private Object value;
 
-    public ArgumentValue(String type, Object value) {
+    public ConstructorArgumentValue(String type, Object value) {
         this.type = type;
         this.value = value;
     }

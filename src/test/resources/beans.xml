@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans>
-    <bean id="testService" class="com.tiv.minispring.TestServiceImpl"></bean>
+    <bean id="testService" class="com.tiv.minispring.TestServiceImpl">
+        <constructor-arg name="name" type="String" value="test1"/>
+        <constructor-arg name="level" type="int" value="1"/>
+        <property name="property1" type="String" value="p1"/>
+        <property name="property2" type="String" value="p2"/>
+    </bean>
 </beans>
