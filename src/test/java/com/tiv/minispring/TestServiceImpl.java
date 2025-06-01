@@ -19,6 +19,8 @@ public class TestServiceImpl implements TestService {
 
     private String property2;
 
+    private BaseService ref1;
+
     public TestServiceImpl(String name, int level) {
         this.name = name;
         this.level = level;

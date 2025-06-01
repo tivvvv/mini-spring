@@ -9,6 +9,7 @@ import com.tiv.minispring.bean.injection.PropertyValues;
 import com.tiv.minispring.core.Resource;
 import org.dom4j.Element;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +23,11 @@ public class XmlBeanDefinitionReader {
         this.simpleBeanFactory = simpleBeanFactory;
     }
 
+    /**
+     * 加载bean定义
+     *
+     * @param resource
+     */
     public void loadBeanDefinitions(Resource resource) {
         while (resource.hasNext()) {
             Element element = (Element) resource.next();
@@ -32,11 +38,23 @@ public class XmlBeanDefinitionReader {
             // 处理属性
             List<Element> propertyElements = element.elements("property");
             PropertyValues propertyValues = new PropertyValues();
+            List<String> refs = new ArrayList<>();
             for (Element e : propertyElements) {
                 String pName = e.attributeValue("name");
                 String pType = e.attributeValue("type");
                 String pValue = e.attributeValue("value");
-                propertyValues.addPropertyValue(new PropertyValue(pName, pType, pValue));
+                String pRef = e.attributeValue("ref");
+                String pV = "";
+                boolean isRef = false;
+                if (pValue != null && !pValue.equals("")) {
+                    isRef = false;
+                    pV = pValue;
+                } else if (pRef != null && !pRef.equals("")) {
+                    isRef = true;
+                    pV = pRef;
+                    refs.add(pRef);
+                }
+                propertyValues.addPropertyValue(new PropertyValue(pName, pType, pV, isRef));
             }
             beanDefinition.setPropertyValues(propertyValues);
 
@@ -50,6 +68,9 @@ public class XmlBeanDefinitionReader {
                 constructorArgumentValues.addGenericArgumentValue(new ConstructorArgumentValue(cName, cType, cValue));
             }
             beanDefinition.setConstructorArgumentValues(constructorArgumentValues);
+
+            String[] refArray = refs.toArray(new String[0]);
+            beanDefinition.setDependsOn(refArray);
             this.simpleBeanFactory.registerBeanDefinition(beanId, beanDefinition);
         }
     }

@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans>
+
+    <bean id="baseService" class="com.tiv.minispring.BaseService"/>
+
     <bean id="testService" class="com.tiv.minispring.TestServiceImpl">
         <constructor-arg name="name" type="String" value="test1"/>
         <constructor-arg name="level" type="int" value="1"/>
         <property name="property1" type="String" value="p1"/>
         <property name="property2" type="String" value="p2"/>
+        <property name="ref1" type="com.tiv.minispring.BaseService" ref="baseService"/>
     </bean>
+
 </beans>

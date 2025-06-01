@@ -10,10 +10,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public class PropertyValue {
 
-    private String name;
+    private final String name;
 
-    private String type;
+    private final String type;
 
-    private Object value;
+    private final Object value;
+
+    private final boolean isRef;
 
 }

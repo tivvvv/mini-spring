@@ -145,6 +145,11 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
             e.printStackTrace();
         }
 
+        handleProperties(beanDefinition, clazz, object);
+        return object;
+    }
+
+    private void handleProperties(BeanDefinition beanDefinition, Class<?> clazz, Object object) {
         PropertyValues propertyValues = beanDefinition.getPropertyValues();
         if (!propertyValues.isEmpty()) {
             for (int i = 0; i < propertyValues.size(); i++) {
@@ -152,18 +157,30 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
                 String pName = propertyValue.getName();
                 String pType = propertyValue.getType();
                 Object pValue = propertyValue.getValue();
+                boolean isRef = propertyValue.isRef();
                 Class<?>[] paramTypes = new Class<?>[1];
-                if ("String".equals(pType) || "java.lang.String".equals(pType)) {
-                    paramTypes[0] = String.class;
-                } else if ("Integer".equals(pType) || "java.lang.Integer".equals(pType)) {
-                    paramTypes[0] = Integer.class;
-                } else if ("int".equals(pType)) {
-                    paramTypes[0] = int.class;
-                } else {
-                    paramTypes[0] = String.class;
-                }
                 Object[] paramValues = new Object[1];
-                paramValues[0] = pValue;
+                if (!isRef) {
+                    if ("String".equals(pType) || "java.lang.String".equals(pType)) {
+                        paramTypes[0] = String.class;
+                    } else if ("Integer".equals(pType) || "java.lang.Integer".equals(pType)) {
+                        paramTypes[0] = Integer.class;
+                    } else if ("int".equals(pType)) {
+                        paramTypes[0] = int.class;
+                    } else {
+                        paramTypes[0] = String.class;
+                    }
+                    paramValues[0] = pValue;
+                } else {
+                    try {
+                        // 获取引用的类
+                        paramTypes[0] = Class.forName(pType);
+                        // 获取引用的bean
+                        paramValues[0] = getBean((String) pValue);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
 
                 String methodName = "set" + pName.substring(0, 1).toUpperCase() + pName.substring(1);
                 Method method = null;
@@ -174,9 +191,8 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
         }
-        return object;
     }
+
 }
