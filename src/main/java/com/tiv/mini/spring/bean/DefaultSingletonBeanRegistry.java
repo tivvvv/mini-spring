@@ -1,4 +1,4 @@
-package com.tiv.minispring.bean;
+package com.tiv.mini.spring.bean;
 
 import java.util.ArrayList;
 import java.util.List;

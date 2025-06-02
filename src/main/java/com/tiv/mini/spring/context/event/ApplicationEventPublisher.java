@@ -1,4 +1,4 @@
-package com.tiv.minispring.context.event;
+package com.tiv.mini.spring.context.event;
 
 import com.apple.eawt.ApplicationEvent;
 

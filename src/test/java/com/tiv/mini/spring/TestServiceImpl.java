@@ -1,4 +1,4 @@
-package com.tiv.minispring;
+package com.tiv.mini.spring;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +28,8 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public void hello() {
-        System.out.println(this);
+        System.out.println(this.property1 + " " + this.property2);
+        ref1.hello();
     }
 
 }

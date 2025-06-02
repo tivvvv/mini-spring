@@ -1,4 +1,4 @@
-package com.tiv.minispring;
+package com.tiv.mini.spring;
 
 public interface TestService {
 

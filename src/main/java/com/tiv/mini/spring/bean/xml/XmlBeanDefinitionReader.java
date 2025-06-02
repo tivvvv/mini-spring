@@ -1,12 +1,12 @@
-package com.tiv.minispring.bean.xml;
+package com.tiv.mini.spring.bean.xml;
 
-import com.tiv.minispring.bean.BeanDefinition;
-import com.tiv.minispring.bean.SimpleBeanFactory;
-import com.tiv.minispring.bean.injection.ConstructorArgumentValue;
-import com.tiv.minispring.bean.injection.ConstructorArgumentValues;
-import com.tiv.minispring.bean.injection.PropertyValue;
-import com.tiv.minispring.bean.injection.PropertyValues;
-import com.tiv.minispring.core.Resource;
+import com.tiv.mini.spring.bean.BeanDefinition;
+import com.tiv.mini.spring.bean.SimpleBeanFactory;
+import com.tiv.mini.spring.bean.injection.ConstructorArgumentValue;
+import com.tiv.mini.spring.bean.injection.ConstructorArgumentValues;
+import com.tiv.mini.spring.bean.injection.PropertyValue;
+import com.tiv.mini.spring.bean.injection.PropertyValues;
+import com.tiv.mini.spring.core.Resource;
 import org.dom4j.Element;
 
 import java.util.ArrayList;
@@ -35,6 +35,17 @@ public class XmlBeanDefinitionReader {
             String beanClassName = element.attributeValue("class");
             BeanDefinition beanDefinition = new BeanDefinition(beanId, beanClassName);
 
+            // 处理构造器参数
+            List<Element> constructorElements = element.elements("constructor-arg");
+            ConstructorArgumentValues constructorArgumentValues = new ConstructorArgumentValues();
+            for (Element e : constructorElements) {
+                String cName = e.attributeValue("name");
+                String cType = e.attributeValue("type");
+                String cValue = e.attributeValue("value");
+                constructorArgumentValues.addGenericArgumentValue(new ConstructorArgumentValue(cName, cType, cValue));
+            }
+            beanDefinition.setConstructorArgumentValues(constructorArgumentValues);
+
             // 处理属性
             List<Element> propertyElements = element.elements("property");
             PropertyValues propertyValues = new PropertyValues();
@@ -57,17 +68,6 @@ public class XmlBeanDefinitionReader {
                 propertyValues.addPropertyValue(new PropertyValue(pName, pType, pV, isRef));
             }
             beanDefinition.setPropertyValues(propertyValues);
-
-            // 处理构造器参数
-            List<Element> constructorElements = element.elements("constructor-arg");
-            ConstructorArgumentValues constructorArgumentValues = new ConstructorArgumentValues();
-            for (Element e : constructorElements) {
-                String cName = e.attributeValue("name");
-                String cType = e.attributeValue("type");
-                String cValue = e.attributeValue("value");
-                constructorArgumentValues.addGenericArgumentValue(new ConstructorArgumentValue(cName, cType, cValue));
-            }
-            beanDefinition.setConstructorArgumentValues(constructorArgumentValues);
 
             String[] refArray = refs.toArray(new String[0]);
             beanDefinition.setDependsOn(refArray);

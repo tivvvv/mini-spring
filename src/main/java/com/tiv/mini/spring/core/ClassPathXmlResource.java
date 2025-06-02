@@ -1,4 +1,4 @@
-package com.tiv.minispring.core;
+package com.tiv.mini.spring.core;
 
 import org.dom4j.Document;
 import org.dom4j.Element;

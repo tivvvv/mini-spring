@@ -1,7 +1,7 @@
-package com.tiv.minispring;
+package com.tiv.mini.spring;
 
-import com.tiv.minispring.bean.exception.BeansException;
-import com.tiv.minispring.context.ClassPathXmlApplicationContext;
+import com.tiv.mini.spring.bean.exception.BeansException;
+import com.tiv.mini.spring.context.ClassPathXmlApplicationContext;
 
 public class Test {
 

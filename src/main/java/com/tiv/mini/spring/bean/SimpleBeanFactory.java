@@ -1,15 +1,16 @@
-package com.tiv.minispring.bean;
+package com.tiv.mini.spring.bean;
 
-import com.tiv.minispring.bean.exception.BeansException;
-import com.tiv.minispring.bean.injection.ConstructorArgumentValue;
-import com.tiv.minispring.bean.injection.ConstructorArgumentValues;
-import com.tiv.minispring.bean.injection.PropertyValue;
-import com.tiv.minispring.bean.injection.PropertyValues;
+import com.tiv.mini.spring.bean.exception.BeansException;
+import com.tiv.mini.spring.bean.injection.ConstructorArgumentValue;
+import com.tiv.mini.spring.bean.injection.ConstructorArgumentValues;
+import com.tiv.mini.spring.bean.injection.PropertyValue;
+import com.tiv.mini.spring.bean.injection.PropertyValues;
 import lombok.NoArgsConstructor;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,6 +25,8 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
 
     private List<String> beanDefinitionNames = new ArrayList<>();
 
+    private final Map<String, Object> earlySingletonObjects = new HashMap<String, Object>(16);
+
     /**
      * 获取bean实例
      *
@@ -36,20 +39,21 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
         // 尝试获取bean实例
         Object singleton = this.getSingleton(beanName);
         if (singleton == null) {
-            // 获取bean定义
-            BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
-            if (beanDefinition == null) {
-                throw new BeansException("bean not found");
+            // 尝试从毛胚中获取
+            singleton = this.earlySingletonObjects.get(beanName);
+            if (singleton == null) {
+                // 获取bean定义
+                BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
+                if (beanDefinition == null) {
+                    throw new BeansException("bean not found");
+                }
+                // 创建bean实例
+                singleton = createBean(beanDefinition);
+                this.registerSingleton(beanName, singleton);
             }
-            // 创建bean实例
-            singleton = createBean(beanDefinition);
-
-            // 注册bean实例
-            this.registerSingleton(beanName, singleton);
         }
         return singleton;
     }
-
 
     @Override
     public boolean containsBean(String beanName) {
@@ -105,7 +109,30 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
         return this.beanDefinitionMap.containsKey(name);
     }
 
-    private Object createBean(BeanDefinition beanDefinition) {
+    protected Object createBean(BeanDefinition beanDefinition) {
+        Class<?> clazz = null;
+        Object obj = createEarlySingleton(beanDefinition);
+        this.earlySingletonObjects.put(beanDefinition.getId(), obj);
+        try {
+            clazz = Class.forName(beanDefinition.getClassName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        handleProperties(beanDefinition, clazz, obj);
+        return obj;
+    }
+
+    public void refresh() {
+        for (String beanName : beanDefinitionNames) {
+            try {
+                getBean(beanName);
+            } catch (BeansException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private Object createEarlySingleton(BeanDefinition beanDefinition) {
         Class<?> clazz = null;
         Object object = null;
         Constructor<?> constructor = null;
@@ -144,8 +171,6 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        handleProperties(beanDefinition, clazz, object);
         return object;
     }
 

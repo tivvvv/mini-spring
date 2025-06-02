@@ -1,13 +1,13 @@
-package com.tiv.minispring.context;
+package com.tiv.mini.spring.context;
 
 import com.apple.eawt.ApplicationEvent;
-import com.tiv.minispring.bean.BeanFactory;
-import com.tiv.minispring.bean.SimpleBeanFactory;
-import com.tiv.minispring.bean.exception.BeansException;
-import com.tiv.minispring.bean.xml.XmlBeanDefinitionReader;
-import com.tiv.minispring.context.event.ApplicationEventPublisher;
-import com.tiv.minispring.core.ClassPathXmlResource;
-import com.tiv.minispring.core.Resource;
+import com.tiv.mini.spring.bean.BeanFactory;
+import com.tiv.mini.spring.bean.SimpleBeanFactory;
+import com.tiv.mini.spring.bean.exception.BeansException;
+import com.tiv.mini.spring.bean.xml.XmlBeanDefinitionReader;
+import com.tiv.mini.spring.context.event.ApplicationEventPublisher;
+import com.tiv.mini.spring.core.ClassPathXmlResource;
+import com.tiv.mini.spring.core.Resource;
 
 /**
  * 类路径xml应用上下文
@@ -18,10 +18,18 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
     SimpleBeanFactory beanFactory;
 
     public ClassPathXmlApplicationContext(String fileName) {
-        this.beanFactory = new SimpleBeanFactory();
-        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(this.beanFactory);
+        this(fileName, true);
+    }
+
+    public ClassPathXmlApplicationContext(String fileName, boolean isRefresh) {
         Resource resource = new ClassPathXmlResource(fileName);
+        SimpleBeanFactory simpleBeanFactory = new SimpleBeanFactory();
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(simpleBeanFactory);
         reader.loadBeanDefinitions(resource);
+        this.beanFactory = simpleBeanFactory;
+        if (isRefresh) {
+            this.beanFactory.refresh();
+        }
     }
 
     @Override

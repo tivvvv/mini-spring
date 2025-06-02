@@ -1,6 +1,6 @@
-package com.tiv.minispring.bean;
+package com.tiv.mini.spring.bean;
 
-import com.tiv.minispring.bean.exception.BeansException;
+import com.tiv.mini.spring.bean.exception.BeansException;
 
 /**
  * bean工厂接口

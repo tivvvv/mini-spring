@@ -1,4 +1,4 @@
-package com.tiv.minispring.bean;
+package com.tiv.mini.spring.bean;
 
 /**
  * bean定义注册接口

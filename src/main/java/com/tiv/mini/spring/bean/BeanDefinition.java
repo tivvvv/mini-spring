@@ -1,7 +1,7 @@
-package com.tiv.minispring.bean;
+package com.tiv.mini.spring.bean;
 
-import com.tiv.minispring.bean.injection.ConstructorArgumentValues;
-import com.tiv.minispring.bean.injection.PropertyValues;
+import com.tiv.mini.spring.bean.injection.ConstructorArgumentValues;
+import com.tiv.mini.spring.bean.injection.PropertyValues;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,7 +26,7 @@ public class BeanDefinition {
 
     private String initMethodName;
 
-    private boolean lazyInit = false;
+    private boolean lazyInit = true;
 
     private String[] dependsOn;
 
