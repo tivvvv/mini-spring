@@ -1,4 +1,4 @@
-package com.tiv.mini.spring.bean;
+package com.tiv.mini.spring.beans.factory.config;
 
 /**
  * 单例bean注册接口

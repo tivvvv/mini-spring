@@ -1,4 +1,4 @@
-package com.tiv.mini.spring.bean.injection;
+package com.tiv.mini.spring.beans;
 
 import lombok.NoArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.tiv.mini.spring.bean.exception;
+package com.tiv.mini.spring.beans.factory.exception;
 
 /**
  * 自定义bean异常类

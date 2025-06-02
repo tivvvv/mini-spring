@@ -1,11 +1,11 @@
-package com.tiv.mini.spring.bean.xml;
+package com.tiv.mini.spring.beans.factory.xml;
 
-import com.tiv.mini.spring.bean.BeanDefinition;
-import com.tiv.mini.spring.bean.SimpleBeanFactory;
-import com.tiv.mini.spring.bean.injection.ConstructorArgumentValue;
-import com.tiv.mini.spring.bean.injection.ConstructorArgumentValues;
-import com.tiv.mini.spring.bean.injection.PropertyValue;
-import com.tiv.mini.spring.bean.injection.PropertyValues;
+import com.tiv.mini.spring.beans.PropertyValue;
+import com.tiv.mini.spring.beans.PropertyValues;
+import com.tiv.mini.spring.beans.factory.config.BeanDefinition;
+import com.tiv.mini.spring.beans.factory.config.ConstructorArgumentValue;
+import com.tiv.mini.spring.beans.factory.config.ConstructorArgumentValues;
+import com.tiv.mini.spring.beans.factory.support.SimpleBeanFactory;
 import com.tiv.mini.spring.core.Resource;
 import org.dom4j.Element;
 

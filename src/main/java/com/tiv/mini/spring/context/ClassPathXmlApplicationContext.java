@@ -1,10 +1,10 @@
 package com.tiv.mini.spring.context;
 
 import com.apple.eawt.ApplicationEvent;
-import com.tiv.mini.spring.bean.BeanFactory;
-import com.tiv.mini.spring.bean.SimpleBeanFactory;
-import com.tiv.mini.spring.bean.exception.BeansException;
-import com.tiv.mini.spring.bean.xml.XmlBeanDefinitionReader;
+import com.tiv.mini.spring.beans.factory.exception.BeansException;
+import com.tiv.mini.spring.beans.factory.BeanFactory;
+import com.tiv.mini.spring.beans.factory.support.SimpleBeanFactory;
+import com.tiv.mini.spring.beans.factory.xml.XmlBeanDefinitionReader;
 import com.tiv.mini.spring.context.event.ApplicationEventPublisher;
 import com.tiv.mini.spring.core.ClassPathXmlResource;
 import com.tiv.mini.spring.core.Resource;

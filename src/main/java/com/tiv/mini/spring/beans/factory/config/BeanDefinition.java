@@ -1,7 +1,6 @@
-package com.tiv.mini.spring.bean;
+package com.tiv.mini.spring.beans.factory.config;
 
-import com.tiv.mini.spring.bean.injection.ConstructorArgumentValues;
-import com.tiv.mini.spring.bean.injection.PropertyValues;
+import com.tiv.mini.spring.beans.PropertyValues;
 import lombok.Getter;
 import lombok.Setter;
 

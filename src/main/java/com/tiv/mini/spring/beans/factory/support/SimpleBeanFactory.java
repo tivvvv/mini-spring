@@ -1,10 +1,12 @@
-package com.tiv.mini.spring.bean;
+package com.tiv.mini.spring.beans.factory.support;
 
-import com.tiv.mini.spring.bean.exception.BeansException;
-import com.tiv.mini.spring.bean.injection.ConstructorArgumentValue;
-import com.tiv.mini.spring.bean.injection.ConstructorArgumentValues;
-import com.tiv.mini.spring.bean.injection.PropertyValue;
-import com.tiv.mini.spring.bean.injection.PropertyValues;
+import com.tiv.mini.spring.beans.PropertyValue;
+import com.tiv.mini.spring.beans.PropertyValues;
+import com.tiv.mini.spring.beans.factory.exception.BeansException;
+import com.tiv.mini.spring.beans.factory.BeanFactory;
+import com.tiv.mini.spring.beans.factory.config.BeanDefinition;
+import com.tiv.mini.spring.beans.factory.config.ConstructorArgumentValue;
+import com.tiv.mini.spring.beans.factory.config.ConstructorArgumentValues;
 import lombok.NoArgsConstructor;
 
 import java.lang.reflect.Constructor;
@@ -45,7 +47,7 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
                 // 获取bean定义
                 BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
                 if (beanDefinition == null) {
-                    throw new BeansException("bean not found");
+                    throw new BeansException("beans not found");
                 }
                 // 创建bean实例
                 singleton = createBean(beanDefinition);

@@ -1,4 +1,6 @@
-package com.tiv.mini.spring.bean;
+package com.tiv.mini.spring.beans.factory.support;
+
+import com.tiv.mini.spring.beans.factory.config.BeanDefinition;
 
 /**
  * bean定义注册接口
