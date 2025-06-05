@@ -3,7 +3,7 @@
 <beans>
 
     <bean id="baseService" class="com.tiv.mini.spring.BaseService">
-        <property name="bbs" type="com.tiv.mini.spring.BaseBaseService" ref="basebaseservice"/>
+        <!--        <property name="bbs" type="com.tiv.mini.spring.BaseBaseService" ref="baseBaseService"/>-->
     </bean>
 
     <bean id="testService" class="com.tiv.mini.spring.TestServiceImpl">
@@ -14,7 +14,7 @@
         <property name="ref1" type="com.tiv.mini.spring.BaseService" ref="baseService"/>
     </bean>
 
-    <bean id="basebaseservice" class="com.tiv.mini.spring.BaseBaseService">
+    <bean id="baseBaseService" class="com.tiv.mini.spring.BaseBaseService">
         <property name="ts" type="com.tiv.mini.spring.TestServiceImpl" ref="testService"/>
     </bean>
 

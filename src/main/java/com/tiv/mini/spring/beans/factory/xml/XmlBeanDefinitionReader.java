@@ -5,8 +5,9 @@ import com.tiv.mini.spring.beans.PropertyValues;
 import com.tiv.mini.spring.beans.factory.config.BeanDefinition;
 import com.tiv.mini.spring.beans.factory.config.ConstructorArgumentValue;
 import com.tiv.mini.spring.beans.factory.config.ConstructorArgumentValues;
-import com.tiv.mini.spring.beans.factory.support.SimpleBeanFactory;
+import com.tiv.mini.spring.beans.factory.support.AbstractBeanFactory;
 import com.tiv.mini.spring.core.Resource;
+import lombok.AllArgsConstructor;
 import org.dom4j.Element;
 
 import java.util.ArrayList;
@@ -15,13 +16,10 @@ import java.util.List;
 /**
  * xml bean定义读取器
  */
+@AllArgsConstructor
 public class XmlBeanDefinitionReader {
 
-    SimpleBeanFactory simpleBeanFactory;
-
-    public XmlBeanDefinitionReader(SimpleBeanFactory simpleBeanFactory) {
-        this.simpleBeanFactory = simpleBeanFactory;
-    }
+    AbstractBeanFactory beanFactory;
 
     /**
      * 加载bean定义
@@ -71,7 +69,7 @@ public class XmlBeanDefinitionReader {
 
             String[] refArray = refs.toArray(new String[0]);
             beanDefinition.setDependsOn(refArray);
-            this.simpleBeanFactory.registerBeanDefinition(beanId, beanDefinition);
+            this.beanFactory.registerBeanDefinition(beanId, beanDefinition);
         }
     }
 
