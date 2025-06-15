@@ -1,7 +1,7 @@
 package com.tiv.mini.spring.beans.factory.config;
 
 /**
- * 单例bean注册接口
+ * 单例bean仓库接口
  */
 public interface SingletonBeanRegistry {
 

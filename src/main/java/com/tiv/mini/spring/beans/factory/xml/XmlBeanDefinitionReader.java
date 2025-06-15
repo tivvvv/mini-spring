@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * xml bean定义读取器
+ * xml bean定义信息读取器
  */
 @AllArgsConstructor
 public class XmlBeanDefinitionReader {
@@ -22,7 +22,7 @@ public class XmlBeanDefinitionReader {
     AbstractBeanFactory beanFactory;
 
     /**
-     * 加载bean定义
+     * 加载bean定义信息
      *
      * @param resource
      */

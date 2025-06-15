@@ -2,8 +2,8 @@ package com.tiv.mini.spring.beans.factory.support;
 
 import com.tiv.mini.spring.beans.PropertyValue;
 import com.tiv.mini.spring.beans.PropertyValues;
-import com.tiv.mini.spring.beans.factory.BeanFactory;
 import com.tiv.mini.spring.beans.factory.config.BeanDefinition;
+import com.tiv.mini.spring.beans.factory.config.ConfigurableBeanFactory;
 import com.tiv.mini.spring.beans.factory.config.ConstructorArgumentValue;
 import com.tiv.mini.spring.beans.factory.config.ConstructorArgumentValues;
 import com.tiv.mini.spring.beans.factory.exception.BeansException;
@@ -21,13 +21,26 @@ import java.util.concurrent.ConcurrentHashMap;
  * 抽象bean工厂
  */
 @NoArgsConstructor
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory, BeanDefinitionRegistry {
+public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory, BeanDefinitionRegistry {
 
-    private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
+    /**
+     * bean定义信息map
+     */
+    protected Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
 
-    private List<String> beanDefinitionNames = new ArrayList<>();
+    /**
+     * bean定义名称列表
+     */
+    protected List<String> beanDefinitionNames = new ArrayList<>();
 
-    private final Map<String, Object> earlySingletonObjects = new HashMap<String, Object>(16);
+    /**
+     * 毛胚bean实例map
+     */
+    protected final Map<String, Object> earlySingletonObjects = new HashMap<String, Object>(16);
+
+    abstract protected Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) throws BeansException;
+
+    abstract protected Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName) throws BeansException;
 
     /**
      * 刷新bean实例
@@ -67,7 +80,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
             // 尝试从毛胚中获取
             singleton = this.earlySingletonObjects.get(beanName);
             if (singleton == null) {
-                // 获取bean定义
+                // 获取bean定义信息
                 BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
                 if (beanDefinition == null) {
                     throw new BeansException("beans not found");
@@ -77,13 +90,13 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
                 // 注册bean实例
                 this.registerBean(beanName, singleton);
                 // 初始化前置处理bean
-                applyBeanPostProcessorBeforeInitialization(singleton, beanName);
+                applyBeanPostProcessorsBeforeInitialization(singleton, beanName);
                 // 调用初始化方法
                 if (beanDefinition.getInitMethodName() != null && !beanDefinition.getInitMethodName().isEmpty()) {
                     invokeInitMethod(beanDefinition, singleton);
                 }
                 // 初始化后置处理bean
-                applyBeanPostProcessorAfterInitialization(singleton, beanName);
+                applyBeanPostProcessorsAfterInitialization(singleton, beanName);
             }
         }
         return singleton;
@@ -124,7 +137,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
             e.printStackTrace();
         }
         // 处理bean属性
-        handleProperties(beanDefinition, clazz, obj);
+        populateBean(beanDefinition, clazz, obj);
         return obj;
     }
 
@@ -283,9 +296,5 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     public Class<?> getType(String beanName) {
         return getBeanDefinition(beanName).getClass();
     }
-
-    abstract public Object applyBeanPostProcessorBeforeInitialization(Object existingBean, String beanName) throws BeansException;
-
-    abstract public Object applyBeanPostProcessorAfterInitialization(Object existingBean, String beanName) throws BeansException;
 
 }

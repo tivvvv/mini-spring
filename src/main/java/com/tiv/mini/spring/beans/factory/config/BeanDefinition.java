@@ -1,19 +1,16 @@
 package com.tiv.mini.spring.beans.factory.config;
 
 import com.tiv.mini.spring.beans.PropertyValues;
+import com.tiv.mini.spring.beans.factory.support.BeanConstants;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * bean定义类
+ * bean定义信息类
  */
 @Getter
 @Setter
 public class BeanDefinition {
-
-    private final String SCOPE_SINGLETON = "singleton";
-
-    private final String SCOPE_PROTOTYPE = "prototype";
 
     private String id;
 
@@ -31,7 +28,7 @@ public class BeanDefinition {
 
     private volatile Object beanClass;
 
-    private String scope = SCOPE_SINGLETON;
+    private String scope = BeanConstants.SCOPE_SINGLETON;
 
     public BeanDefinition(String id, String className) {
         this.id = id;
@@ -39,10 +36,10 @@ public class BeanDefinition {
     }
 
     public boolean isSingleton() {
-        return SCOPE_SINGLETON.equals(scope);
+        return BeanConstants.SCOPE_SINGLETON.equals(scope);
     }
 
     public boolean isPrototype() {
-        return SCOPE_PROTOTYPE.equals(scope);
+        return BeanConstants.SCOPE_PROTOTYPE.equals(scope);
     }
 }

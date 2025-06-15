@@ -1,5 +1,6 @@
 package com.tiv.mini.spring.beans.factory.config;
 
+import com.tiv.mini.spring.beans.factory.BeanFactory;
 import com.tiv.mini.spring.beans.factory.exception.BeansException;
 
 /**
@@ -26,5 +27,12 @@ public interface BeanPostProcessor {
      * @throws BeansException
      */
     Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException;
+
+    /**
+     * 设置bean工厂
+     *
+     * @param beanFactory
+     */
+    void setBeanFactory(BeanFactory beanFactory);
 
 }

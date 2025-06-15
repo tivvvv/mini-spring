@@ -1,12 +1,14 @@
 package com.tiv.mini.spring.context;
 
-import com.apple.eawt.ApplicationEvent;
-import com.tiv.mini.spring.beans.factory.BeanFactory;
 import com.tiv.mini.spring.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
-import com.tiv.mini.spring.beans.factory.config.AutowireCapableBeanFactory;
+import com.tiv.mini.spring.beans.factory.config.ConfigurableListableBeanFactory;
 import com.tiv.mini.spring.beans.factory.exception.BeansException;
+import com.tiv.mini.spring.beans.factory.support.DefaultListableBeanFactory;
 import com.tiv.mini.spring.beans.factory.xml.XmlBeanDefinitionReader;
-import com.tiv.mini.spring.context.event.ApplicationEventPublisher;
+import com.tiv.mini.spring.context.event.ApplicationEvent;
+import com.tiv.mini.spring.context.event.ApplicationListener;
+import com.tiv.mini.spring.context.event.ContextRefreshEvent;
+import com.tiv.mini.spring.context.event.SimpleApplicationEventPublisher;
 import com.tiv.mini.spring.core.ClassPathXmlResource;
 import com.tiv.mini.spring.core.Resource;
 
@@ -14,9 +16,9 @@ import com.tiv.mini.spring.core.Resource;
  * 类路径xml应用上下文
  * 上下文负责整合容器的启动过程,读取外部配置,解析并构建bean定义,创建bean工厂
  */
-public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationEventPublisher {
+public class ClassPathXmlApplicationContext extends AbstractApplicationContext {
 
-    AutowireCapableBeanFactory beanFactory;
+    DefaultListableBeanFactory beanFactory;
 
     public ClassPathXmlApplicationContext(String fileName) {
         this(fileName, true);
@@ -24,7 +26,7 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
 
     public ClassPathXmlApplicationContext(String fileName, boolean isRefresh) {
         Resource resource = new ClassPathXmlResource(fileName);
-        AutowireCapableBeanFactory beanFactory = new AutowireCapableBeanFactory();
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
         reader.loadBeanDefinitions(resource);
         this.beanFactory = beanFactory;
@@ -33,19 +35,41 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
         }
     }
 
-    public void refresh() {
-        // 注册bean后置处理器
-        registerBeanPostProcessors(this.beanFactory);
-        // 注册bean
-        onRefresh();
+    @Override
+    void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+
     }
 
-    private void registerBeanPostProcessors(AutowireCapableBeanFactory beanFactory) {
-        beanFactory.addBeanPostProcessor(new AutowiredAnnotationBeanPostProcessor());
+    @Override
+    void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) {
+        this.beanFactory.addBeanPostProcessor(new AutowiredAnnotationBeanPostProcessor());
     }
 
-    private void onRefresh() {
+    @Override
+    void initApplicationEventPublisher() {
+        SimpleApplicationEventPublisher simpleApplicationEventPublisher = new SimpleApplicationEventPublisher();
+        this.setApplicationEventPublisher(simpleApplicationEventPublisher);
+    }
+
+    @Override
+    void onRefresh() {
         this.beanFactory.refresh();
+    }
+
+    @Override
+    void registerListeners() {
+        ApplicationListener listener = new ApplicationListener();
+        this.getApplicationEventPublisher().addApplicationListener(listener);
+    }
+
+    @Override
+    void finishRefresh() {
+        publishEvent(new ContextRefreshEvent("context refresh finished."));
+    }
+
+    @Override
+    public ConfigurableListableBeanFactory getBeanFactory() {
+        return this.beanFactory;
     }
 
     @Override
@@ -59,22 +83,13 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
     }
 
     @Override
-    public boolean isSingleton(String beanName) {
-        return false;
-    }
-
-    @Override
-    public boolean isPrototype(String beanName) {
-        return false;
-    }
-
-    @Override
-    public Class<?> getType(String beanName) {
-        return null;
-    }
-
-    @Override
     public void publishEvent(ApplicationEvent event) {
-
+        this.getApplicationEventPublisher().publishEvent(event);
     }
+
+    @Override
+    public void addApplicationListener(ApplicationListener listener) {
+        this.getApplicationEventPublisher().addApplicationListener(listener);
+    }
+
 }

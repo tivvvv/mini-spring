@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 默认单例bean注册类
+ * 单例bean仓库默认实现
  */
 public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 

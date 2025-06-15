@@ -1,6 +1,6 @@
 package com.tiv.mini.spring.beans.factory.annotation;
 
-import com.tiv.mini.spring.beans.factory.config.AutowireCapableBeanFactory;
+import com.tiv.mini.spring.beans.factory.BeanFactory;
 import com.tiv.mini.spring.beans.factory.config.BeanPostProcessor;
 import com.tiv.mini.spring.beans.factory.exception.BeansException;
 import lombok.Setter;
@@ -8,12 +8,12 @@ import lombok.Setter;
 import java.lang.reflect.Field;
 
 /**
- * 自动注入注解bean实例化后置处理器
+ * 自动装配注解bean实例化后置处理器
  */
 @Setter
 public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor {
 
-    private AutowireCapableBeanFactory beanFactory;
+    private BeanFactory beanFactory;
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -46,7 +46,12 @@ public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor {
         return null;
     }
 
-    public AutowireCapableBeanFactory getBeanFactory() {
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) {
+        this.beanFactory = beanFactory;
+    }
+
+    public BeanFactory getBeanFactory() {
         return beanFactory;
     }
 

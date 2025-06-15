@@ -1,53 +1,45 @@
 package com.tiv.mini.spring.beans.factory.config;
 
-import com.tiv.mini.spring.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import com.tiv.mini.spring.beans.factory.exception.BeansException;
-import com.tiv.mini.spring.beans.factory.support.AbstractBeanFactory;
-import lombok.Getter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * 自动注入bean工厂
+ * 自动装配bean工厂接口
  */
-@Getter
-public class AutowireCapableBeanFactory extends AbstractBeanFactory {
+public interface AutowireCapableBeanFactory {
 
-    private final List<AutowiredAnnotationBeanPostProcessor> beanPostProcessors = new ArrayList<>();
+    /**
+     * 不自动装配
+     */
+    int AUTOWIRE_NO = 0;
 
-    public void addBeanPostProcessor(AutowiredAnnotationBeanPostProcessor beanPostProcessor) {
-        this.beanPostProcessors.remove(beanPostProcessor);
-        this.beanPostProcessors.add(beanPostProcessor);
-    }
+    /**
+     * 根据bean名称自动装配
+     */
+    int AUTOWIRE_BY_NAME = 1;
 
-    public int getBeanPostProcessorCount() {
-        return this.beanPostProcessors.size();
-    }
+    /**
+     * 根据bean类型自动装配
+     */
+    int AUTOWIRE_BY_TYPE = 2;
 
-    @Override
-    public Object applyBeanPostProcessorBeforeInitialization(Object existingBean, String beanName) throws BeansException {
-        Object result = existingBean;
-        for (AutowiredAnnotationBeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
-            beanPostProcessor.setBeanFactory(this);
-            result = beanPostProcessor.postProcessBeforeInitialization(result, beanName);
-            if (result == null) {
-                return result;
-            }
-        }
-        return null;
-    }
+    /**
+     * 在bean初始化之前应用bean后置处理器
+     *
+     * @param existingBean
+     * @param beanName
+     * @return
+     * @throws BeansException
+     */
+    Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) throws BeansException;
 
-    @Override
-    public Object applyBeanPostProcessorAfterInitialization(Object existingBean, String beanName) throws BeansException {
-        Object result = existingBean;
-        for (AutowiredAnnotationBeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
-            result = beanPostProcessor.postProcessAfterInitialization(result, beanName);
-            if (result == null) {
-                return result;
-            }
-        }
-        return null;
-    }
+    /**
+     * 在bean初始化之后应用bean后置处理器
+     *
+     * @param existingBean
+     * @param beanName
+     * @return
+     * @throws BeansException
+     */
+    Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName) throws BeansException;
 
 }
