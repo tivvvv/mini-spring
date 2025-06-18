@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<beans>
+    <bean id="/helloworld" class="com.tiv.mini.spring.web.HelloWorldBean" value="doGet"/>
+</beans>
