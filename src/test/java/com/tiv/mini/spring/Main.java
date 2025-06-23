@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) throws LifecycleException {
         Tomcat tomcat = new Tomcat();
         String webAppDirLocation = "src/main/WebApp";
-        StandardContext context = (StandardContext) tomcat.addWebapp("/", new File(webAppDirLocation).getAbsolutePath());
+        StandardContext context = (StandardContext) tomcat.addWebapp("", new File(webAppDirLocation).getAbsolutePath());
         Connector connector = new Connector();
         connector.setPort(8000);
         tomcat.setConnector(connector);

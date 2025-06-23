@@ -102,6 +102,21 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private void initMapping() {
+        for (String controllerName : this.controllerNames) {
+            Class<?> clz = this.controllerClasses.get(controllerName);
+            Object obj = this.controllerObjs.get(controllerName);
+            Method[] methods = clz.getDeclaredMethods();
+            for (Method method : methods) {
+                boolean isRequestMapping = method.isAnnotationPresent(RequestMapping.class);
+                if (isRequestMapping) {
+                    String methodName = method.getName();
+                    String urlMapping = method.getAnnotation(RequestMapping.class).value();
+                    this.urlMappingNames.add(urlMapping);
+                    this.urlMappingObjs.put(urlMapping, obj);
+                    this.urlMappingMethods.put(urlMapping, method);
+                }
+            }
+        }
     }
 
     private List<String> scanPackages(List<String> packageNames) {
@@ -135,7 +150,18 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String servletPath = req.getServletPath();
-
+        if (!this.urlMappingNames.contains(servletPath)) {
+            return;
+        }
+        Object result = null;
+        Method method = this.urlMappingMethods.get(servletPath);
+        Object obj = this.urlMappingObjs.get(servletPath);
+        try {
+            result = method.invoke(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        resp.getWriter().append(result.toString());
     }
 
 }
