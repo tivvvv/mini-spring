@@ -56,19 +56,19 @@ public class DispatcherServlet extends HttpServlet {
 
     private String contextConfigLocationStr;
 
+    private WebApplicationContext webApplicationContext;
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-
+        this.webApplicationContext = (WebApplicationContext) this.getServletContext().getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
         contextConfigLocationStr = config.getInitParameter("contextConfigLocation");
         URL xmlPath = null;
-
         try {
             xmlPath = this.getServletContext().getResource(contextConfigLocationStr);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
         this.packageNames = XmlScanComponentHelper.getNodeValue(xmlPath);
         refresh();
     }
